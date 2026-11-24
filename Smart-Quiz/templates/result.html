@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Result — Smart Quiz{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card result-card p-4 text-center mb-4">
+      <h3 class="fw-bold">Quiz Complete!</h3>
+      <p class="text-muted">{{ res.category_name }}</p>
+
+      {% set pct = res.percentage %}
+      <div class="score-circle mx-auto my-3" style="--pct: {{ pct }}">
+        <span>{{ "%.0f"|format(pct) }}%</span>
+      </div>
+
+      <div class="row g-3 my-3">
+        <div class="col-4"><div class="p-2 rounded bg-primary-subtle"><h5 class="mb-0">{{ res.total_questions }}</h5><small class="text-muted">Total</small></div></div>
+        <div class="col-4"><div class="p-2 rounded bg-success-subtle"><h5 class="mb-0 text-success">{{ res.correct }}</h5><small class="text-muted">Correct</small></div></div>
+        <div class="col-4"><div class="p-2 rounded bg-danger-subtle"><h5 class="mb-0 text-danger">{{ res.incorrect }}</h5><small class="text-muted">Incorrect</small></div></div>
+      </div>
+
+      {% if pct >= 80 %}
+        <div class="alert alert-success"><i class="bi bi-trophy"></i> Outstanding! You're a master.</div>
+      {% elif pct >= 60 %}
+        <div class="alert alert-info"><i class="bi bi-emoji-smile"></i> Good job! Keep practicing.</div>
+      {% elif pct >= 40 %}
+        <div class="alert alert-warning"><i class="bi bi-book"></i> Decent — review the topics below.</div>
+      {% else %}
+        <div class="alert alert-danger"><i class="bi bi-arrow-repeat"></i> Don't worry — retake the quiz and improve!</div>
+      {% endif %}
+
+      <div class="d-flex gap-2 justify-content-center flex-wrap">
+        <a href="{{ url_for('quiz', category_id=res.category_id) }}" class="btn btn-primary">
+          <i class="bi bi-arrow-clockwise"></i> Retake Quiz
+        </a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">Back to Dashboard</a>
+      </div>
+    </div>
+
+    <h5 class="fw-bold mb-3">Answer Review</h5>
+    {% for item in review %}
+    <div class="card mb-3 review-item {{ 'border-success' if item.is_correct else 'border-danger' }}">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start">
+          <h6 class="fw-semibold">Q{{ loop.index }}. {{ item.question }}</h6>
+          {% if item.is_correct %}
+            <span class="badge bg-success"><i class="bi bi-check-lg"></i> Correct</span>
+          {% else %}
+            <span class="badge bg-danger"><i class="bi bi-x-lg"></i> Wrong</span>
+          {% endif %}
+        </div>
+        <ul class="list-unstyled mt-3 mb-0">
+          {% for key, text in item.options.items() %}
+          <li class="option-line {{ 'correct-opt' if key == item.correct }} {{ 'chosen-opt' if key == item.chosen }}">
+            <strong>{{ key|upper }}.</strong> {{ text }}
+            {% if key == item.correct %}<i class="bi bi-check-circle-fill text-success ms-1"></i>{% endif %}
+            {% if key == item.chosen and key != item.correct %}<i class="bi bi-x-circle-fill text-danger ms-1"></i>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

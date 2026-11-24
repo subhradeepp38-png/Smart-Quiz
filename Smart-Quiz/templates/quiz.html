@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ category.name }} Quiz — Smart Quiz{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+      <div>
+        <h3 class="fw-bold mb-0">{{ category.name }}</h3>
+        <small class="text-muted">{{ question_count }} questions · {{ time_per_question }}s per question</small>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <span id="timer" class="badge fs-6 bg-dark-subtle text-dark-emphasis border">
+          <i class="bi bi-clock"></i> <span id="timeLeft">--:--</span>
+        </span>
+        <button id="submitBtn" class="btn btn-danger btn-sm">Submit Quiz</button>
+      </div>
+    </div>
+
+    <div class="progress mb-4" style="height:10px">
+      <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%"></div>
+    </div>
+
+    <div id="quizBox" class="card p-4">
+      <div class="d-flex justify-content-between text-muted small mb-2">
+        <span>Question <strong id="qNum">1</strong> of <span id="qTotal">{{ question_count }}</span></span>
+        <span id="answeredCount">0 answered</span>
+      </div>
+      <h4 id="questionText" class="fw-semibold mb-4">Loading...</h4>
+      <div id="optionsBox" class="d-grid gap-2"></div>
+      <div class="d-flex justify-content-between mt-4">
+        <button id="prevBtn" class="btn btn-outline-secondary" disabled>
+          <i class="bi bi-arrow-left"></i> Previous
+        </button>
+        <button id="nextBtn" class="btn btn-primary">
+          Next <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const CATEGORY_ID = {{ category.id }};
+const API_URL = "{{ url_for('api_quiz_questions', category_id=category.id) }}";
+const SUBMIT_URL = "{{ url_for('api_submit') }}";
+const RESULT_URL = "{{ url_for('result', result_id=0) }}".replace('/0', '/');
+</script>
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

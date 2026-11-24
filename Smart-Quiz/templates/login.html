@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Login — Smart Quiz{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5 col-lg-4">
+    <div class="card auth-card p-4">
+      <div class="text-center mb-4">
+        <i class="bi bi-person-circle fs-1 text-primary"></i>
+        <h3 class="fw-bold mt-2">Welcome Back</h3>
+        <p class="text-muted small">Login to continue your quiz journey</p>
+      </div>
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Username or Email</label>
+          <input type="text" name="username" class="form-control" required autofocus>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+        <button class="btn btn-primary w-100">Login</button>
+      </form>
+      <p class="text-center mt-3 small text-muted">
+        No account? <a href="{{ url_for('register') }}">Register here</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

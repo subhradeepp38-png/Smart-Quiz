@@ -1,0 +1,27 @@
+{% extends "admin_base.html" %}
+{% block title %}Results — Smart Quiz{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-4">All Quiz Results</h3>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead><tr><th>#</th><th>User</th><th>Category</th><th>Score</th><th>Correct</th><th>Incorrect</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for r in results %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td>{{ r.username }}</td>
+          <td>{{ r.category_name }}</td>
+          <td><span class="badge {{ 'bg-success' if r.percentage >= 60 else 'bg-danger' }}">{{ "%.0f"|format(r.percentage) }}%</span></td>
+          <td>{{ r.correct }}</td>
+          <td>{{ r.incorrect }}</td>
+          <td class="text-muted small">{{ r.created_at[:16].replace('T',' ') }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No results recorded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

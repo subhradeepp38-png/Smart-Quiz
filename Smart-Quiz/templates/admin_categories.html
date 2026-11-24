@@ -1,0 +1,47 @@
+{% extends "admin_base.html" %}
+{% block title %}Categories — Smart Quiz{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-4 mb-4">
+    <div class="card p-4">
+      <h5 class="fw-bold mb-3">Create Category</h5>
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" name="name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <textarea name="description" class="form-control" rows="2"></textarea>
+        </div>
+        <button class="btn btn-primary w-100">Create</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header fw-bold">All Categories</div>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+          <thead><tr><th>Name</th><th>Description</th><th>Questions</th><th style="width:110px">Actions</th></tr></thead>
+          <tbody>
+            {% for c in categories %}
+            <tr>
+              <td class="fw-semibold">{{ c.name }}</td>
+              <td class="text-muted small">{{ c.description }}</td>
+              <td><span class="badge bg-primary">{{ c.question_count }}</span></td>
+              <td>
+                <form method="post" action="{{ url_for('admin_category_delete', cid=c.id) }}"
+                      onsubmit="return confirm('Delete category and its questions?')">
+                  <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Delete</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

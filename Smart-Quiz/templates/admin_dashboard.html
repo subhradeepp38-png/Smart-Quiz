@@ -1,0 +1,49 @@
+{% extends "admin_base.html" %}
+{% block title %}Admin Dashboard — Smart Quiz{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-4">Dashboard Overview</h3>
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card stat-card p-3 text-center"><h6 class="text-muted">Users</h6><h3 class="fw-bold text-primary">{{ stats.users }}</h3></div></div>
+  <div class="col-6 col-md-3"><div class="card stat-card p-3 text-center"><h6 class="text-muted">Categories</h6><h3 class="fw-bold text-info">{{ stats.categories }}</h3></div></div>
+  <div class="col-6 col-md-3"><div class="card stat-card p-3 text-center"><h6 class="text-muted">Questions</h6><h3 class="fw-bold text-success">{{ stats.questions }}</h3></div></div>
+  <div class="col-6 col-md-3"><div class="card stat-card p-3 text-center"><h6 class="text-muted">Attempts</h6><h3 class="fw-bold text-warning">{{ stats.attempts }}</h3></div></div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header fw-bold">Recent Quiz Results</div>
+      <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+          <thead><tr><th>User</th><th>Category</th><th>Score</th><th>Correct</th><th>Date</th></tr></thead>
+          <tbody>
+            {% for r in recent_results %}
+            <tr>
+              <td>{{ r.username }}</td><td>{{ r.category_name }}</td>
+              <td><span class="badge {{ 'bg-success' if r.percentage >= 60 else 'bg-danger' }}">{{ "%.0f"|format(r.percentage) }}%</span></td>
+              <td>{{ r.correct }}/{{ r.total_questions }}</td>
+              <td class="text-muted small">{{ r.created_at[:10] }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" class="text-center text-muted py-4">No results yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-header fw-bold">Category Performance</div>
+      <ul class="list-group list-group-flush">
+        {% for c in top_categories %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ c.name }}
+          <span><span class="badge bg-secondary me-2">{{ c.attempts }} attempts</span>
+          <span class="badge bg-primary">{{ "%.0f"|format(c.avg) }}% avg</span></span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

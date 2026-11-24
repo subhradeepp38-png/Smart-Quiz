@@ -1,0 +1,44 @@
+{% extends "admin_base.html" %}
+{% block title %}{{ 'Edit' if question else 'Add' }} Question — Smart Quiz{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card p-4">
+      <h4 class="fw-bold mb-4">{{ 'Edit' if question else 'Add New' }} Question</h4>
+      <form method="post">
+        <div class="mb-3">
+          <label class="form-label">Category</label>
+          <select name="category_id" class="form-select" required>
+            {% for c in categories %}
+            <option value="{{ c.id }}" {{ 'selected' if question and question.category_id == c.id }}>{{ c.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Question Text</label>
+          <textarea name="question_text" class="form-control" rows="2" required>{{ question.question_text if question }}</textarea>
+        </div>
+        {% for key, label in [('option_a','Option A'),('option_b','Option B'),('option_c','Option C'),('option_d','Option D')] %}
+        <div class="mb-3">
+          <label class="form-label">{{ label }}</label>
+          <input type="text" name="{{ key }}" class="form-control" required
+                 value="{{ question[key] if question }}">
+        </div>
+        {% endfor %}
+        <div class="mb-4">
+          <label class="form-label">Correct Answer</label>
+          <select name="correct_option" class="form-select" required>
+            {% for key in ['a','b','c','d'] %}
+            <option value="{{ key }}" {{ 'selected' if question and question.correct_option == key }}>{{ key|upper }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary">{{ 'Update' if question else 'Add' }} Question</button>
+          <a href="{{ url_for('admin_questions') }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

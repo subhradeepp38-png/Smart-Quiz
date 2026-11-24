@@ -1,0 +1,10 @@
+Login Credentials
+User Account
+Register your own at http://127.0.0.1:5000/register — or use the test account I created during verification:
+
+Username: testuser
+Password: test123
+Admin Account
+URL: http://127.0.0.1:5000/admin/login
+Username: admin
+Password: admin123

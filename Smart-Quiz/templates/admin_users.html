@@ -1,0 +1,32 @@
+{% extends "admin_base.html" %}
+{% block title %}Users — Smart Quiz{% endblock %}
+{% block content %}
+<h3 class="fw-bold mb-4">Registered Users <span class="badge bg-secondary">{{ users|length }}</span></h3>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead><tr><th>#</th><th>Username</th><th>Email</th><th>Attempts</th><th>Avg Score</th><th>Joined</th><th style="width:110px">Actions</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td class="fw-semibold">{{ u.username }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.attempts }}</td>
+          <td><span class="badge {{ 'bg-success' if u.avg_score >= 60 else 'bg-secondary' }}">{{ "%.0f"|format(u.avg_score) }}%</span></td>
+          <td class="text-muted small">{{ u.created_at[:10] }}</td>
+          <td>
+            <form method="post" action="{{ url_for('admin_user_delete', uid=u.id) }}"
+                  onsubmit="return confirm('Delete this user and all their results?')">
+              <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">No users registered yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
